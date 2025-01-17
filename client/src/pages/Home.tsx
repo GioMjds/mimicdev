@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { getBlogPosts, deleteBlogPost } from "../services/axios";
 
 interface Blog {
     _id: string;
@@ -19,15 +19,10 @@ const Home: React.FC = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
+                const data = await getBlogPosts();
                 setBlogs(data);
             } catch (error) {
                 console.log(`Error fetching data: ${error}`);
-                setError(`Error fetching data: ${error}`);
             }
         };
 
@@ -39,13 +34,8 @@ const Home: React.FC = () => {
         if (!confirm) return;
 
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/blogs/${id}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
+            await deleteBlogPost(id);
             setBlogs(blogs.filter((blog) => blog._id !== id));
-            alert("Blog post deleted successfully!");
         } catch (error) {
             console.error(`Error deleting blog post: ${error}`);
             setError(`Error deleting blog post: ${error}`);
@@ -81,7 +71,6 @@ const Home: React.FC = () => {
                             Read More
                         </Link>
 
-                        {/* Super-user-only CRUD actions */}
                         <div className="absolute top-4 right-4 hidden group-hover:flex space-x-2">
                             <button
                                 onClick={() => navigate(`/edit/${blog._id}`)}

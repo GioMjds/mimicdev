@@ -36,7 +36,7 @@ const EditBlogPost: React.FC = () => {
     try {
       await axios.put(`${import.meta.env.VITE_API_URL}/blogs/${id}`, data);
       alert("Blog post updated successfully!");
-      navigate(`/blog/${id}`);
+      navigate('/');
     } catch (error) {
       console.error(`Error updating blog post: ${error}`);
       setError(`Error updating blog post: ${error}`);
