@@ -1,75 +1,74 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getBlogPosts, deleteBlogPost } from "../services/axios";
-import Search from "../components/Search";
+import Loading from "../components/Loading";
+import ModalBox from "../components/ModalBox";
 
 interface Blog {
     _id: string;
     title: string;
     content: string;
-    author: string;
     createdAt: string;
 }
 
-const Home: React.FC = () => {
+const Home: FC = () => {
     const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<string>("");
     const [blogs, setBlogs] = useState<Blog[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
                 const data = await getBlogPosts();
                 setBlogs(data);
+                setLoading(false);
             } catch (error) {
                 console.log(`Error fetching data: ${error}`);
+                setLoading(false);
             }
         };
 
         fetchBlogs();
     }, []);
 
-    const handleDelete = async (id: string) => {
-        const confirm = window.confirm("Are you sure you want to delete this blog?");
-        if (!confirm) return;
-
-        try {
-            await deleteBlogPost(id);
-            setBlogs(blogs.filter((blog) => blog._id !== id));
-        } catch (error) {
-            console.error(`Error deleting blog post: ${error}`);
-            setError(`Error deleting blog post: ${error}`);
-        }
+    const handleDelete = (item: any) => {
+        setSelectedItem(item);
+        setIsOpen(true);
     };
 
-    if (error) {
-        return <p className="text-red-500 text-center">{error}</p>;
-    }
+    const handleConfirmDelete = async () => {
+        try {
+            await deleteBlogPost(selectedItem);
+            setBlogs(blogs.filter((blog) => blog._id !== selectedItem));
+            console.log(`Deleted item: ${selectedItem}`);
+        } catch (error) {
+            console.log(`Error deleting item: ${error}`);
+        }
+        setIsOpen(false);
+    };
+
+    const handleCancelDelete = () => {
+        setIsOpen(false);
+    };
+
+    if (loading) return <Loading text="Fetching blog posts...." timeout={5000} />;
 
     return (
-        <>
+        <div>
             <div className="flex flex-col gap-2 space-y-3 max-w-7xl mx-auto">
-                <Search />
                 {blogs.map((blog) => (
                     <div
                         key={blog._id}
-                        className="bg-white bg-opacity-10 shadow-md rounded-lg p-4 flex justify-between"
+                        className="rounded-lg p-4 flex justify-between"
                     >
-                        <div>
+                        <div className="flex flex-col">
                             <i className="text-sm">Posted in: {new Date(blog.createdAt).toLocaleDateString()}</i>
-                            <h2 className="text-2xl my-2 font-bold mb-2">{blog.title}</h2>
+                            <h2 className="text-2xl my-2 font-bold mb-2 hover:cursor-pointer hover:underline" onClick={() => navigate(`/blogs/${blog._id}`)}>{blog.title}</h2>
                         </div>
-                        <div className="flex space-x-2 p-2">
-                            <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.90 }}
-                                transition={{ type: 'spring', stiffness: 300 }}
-                                onClick={() => navigate(`/blogs/${blog._id}`)}
-                                className="bg-gradient-to-br from-green-500 to-green-800 text-white p-4 rounded-md"
-                            >
-                                <i className="fas fa-eye"></i>
-                            </motion.button>
+                        <div className="flex flex-row space-x-2 p-1">
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.90 }}
@@ -96,12 +95,23 @@ const Home: React.FC = () => {
                     whileTap={{ scale: 0.90 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                     onClick={() => navigate("/create")}
-                    className="mx-auto bg-gradient-to-br from-navy-bland to-pastel-lightblue text-white p-4 rounded-md"
+                    className="max-w-7xl mx-auto bg-gradient-to-br from-navy-bland to-pastel-lightblue text-white p-4 rounded-md"
                 >
                     <i className="fas fa-plus"></i> Create Blog Post
                 </motion.button>
             </div>
-        </>
+
+            {isOpen && (
+                <ModalBox
+                    title="Deleting Blog Post"
+                    modalMsg={`Are you sure you want to delete this blog post?`}
+                    onClose={handleCancelDelete}
+                    cancelBtn="Cancel"
+                    primaryBtn="Delete Blog"
+                    onPrimaryBtnClick={handleConfirmDelete}
+                />
+            )}
+        </div>
     );
 };
 

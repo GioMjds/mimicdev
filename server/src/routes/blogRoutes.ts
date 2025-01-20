@@ -15,6 +15,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // Fetch a single blog post by ID
+// GET /blogs/:id
 router.get('/:id', async (req: Request, res: Response) => {
     try {
         const blog = await Blog.findById(req.params.id);
@@ -44,6 +45,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
     try {
         const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
         !deletedBlog && res.status(404).json({ message: 'Blog not found' });
+        console.log(`${deletedBlog} deleted successfully!`);
         res.status(200).json({ message: 'Blog deleted successfully' });
     } catch (error: any) {
         res.status(404).json({ message: error.message });
@@ -63,10 +65,26 @@ router.get('/search', async (req: Request, res: Response) => {
                 { createdAt: { $regex: searchTerm, $options: 'i' } },
             ]
         });
+        console.log(blogs);
         res.status(200).json(blogs);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 });
+
+// Create a new blog post
+// POST /blogs/create
+router.post('/create', async (req: Request, res: Response) => {
+    try {
+        const newBlog = await Blog.create({
+            title: req.body.title,
+            content: req.body.content
+        });
+        console.log(newBlog);
+        res.status(200).json(newBlog);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
 export default router;

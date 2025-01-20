@@ -35,12 +35,12 @@ const BlogPost: FC = () => {
   return (
     <>
       <div className="max-w-7xl mx-auto bg-white bg-opacity-30 shadow-md rounded-lg p-4">
-        <p onClick={() => navigate('/')} className="cursor-pointer mb-1">&larr; Go Back</p>
-        <i className="text-white text-sm mb-2">
+        <p onClick={() => navigate('/')} className="cursor-pointer text-xl mb-1">&larr; Go Back</p>
+        <i className="text-gray-100 text-sm mb-2 mx-10">
           Posted on {new Date(blog.createdAt).toLocaleDateString()}
         </i>
-        <h1 className="text-4xl mb-4 font-bold text-left">{blog.title}</h1>
-        <p className="text-gray-700">{blog.content}</p>
+        <h1 className="text-3xl mb-3 mx-10 text-gray-100 font-bold text-left">{blog.title}</h1>
+        <p className="text-gray-100 text-justify mx-10">{blog.content}</p>
       </div>
     </>
   )
