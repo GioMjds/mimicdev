@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -49,7 +49,7 @@ const EditBlogPost: React.FC = () => {
 
   return (
     <motion.div
-      className="min-h-screen p-6 bg-gray-100"
+      className="min-h-screen p-6 bg-sea-blue"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -71,9 +71,15 @@ const EditBlogPost: React.FC = () => {
           <textarea
             {...register("content", { required: true })}
             rows={6}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md resize-none"
           />
         </div>
+        <NavLink
+          to='/'
+          className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-gray-600"
+        >
+          &larr; Go Back
+        </NavLink>
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"

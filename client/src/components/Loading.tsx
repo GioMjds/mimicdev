@@ -19,7 +19,7 @@ const Loading: FC<LoadingProps> = ({ text, timeout, onTimeout }) => {
     }, [timeout, onTimeout]);
     return (
         <motion.div
-            className="flex justify-center items-center h-screen bg-gray-100"
+            className="flex justify-center items-center min-h-screen"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

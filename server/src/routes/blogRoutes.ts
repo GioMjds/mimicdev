@@ -50,4 +50,23 @@ router.delete("/:id", async (req: Request, res: Response) => {
     }
 })
 
+// Search for blog posts
+// GET /blogs/search
+router.get('/search', async (req: Request, res: Response) => {
+    try {
+        const searchTerm = req.query.searchTerm as string;
+        const blogs = await Blog.find({
+            $or: [
+                { title: { $regex: searchTerm, $options: 'i' } },
+                { content: { $regex: searchTerm, $options: 'i' } },
+                { author: { $regex: searchTerm, $options: 'i' } },
+                { createdAt: { $regex: searchTerm, $options: 'i' } },
+            ]
+        });
+        res.status(200).json(blogs);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 export default router;

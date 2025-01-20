@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getBlogPosts, deleteBlogPost } from "../services/axios";
+import Search from "../components/Search";
 
 interface Blog {
     _id: string;
@@ -47,48 +48,60 @@ const Home: React.FC = () => {
     }
 
     return (
-        <motion.div
-            className="min-h-screen p-6 bg-gray-100"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-        >
-            <h1 className="text-4xl font-bold text-center mb-6">Welcome to My Blog</h1>
-
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <>
+            <div className="flex flex-col gap-2 space-y-3 max-w-7xl mx-auto">
+                <Search />
                 {blogs.map((blog) => (
                     <div
                         key={blog._id}
-                        className="bg-white shadow-md rounded-lg p-4 relative group"
+                        className="bg-white bg-opacity-10 shadow-md rounded-lg p-4 flex justify-between"
                     >
-                        <h2 className="text-2xl font-bold mb-2">{blog.title}</h2>
-                        <p className="text-gray-600 mb-4">By {blog.author}</p>
-                        <p className="text-gray-700 line-clamp-3">{blog.content}</p>
-                        <Link
-                            to={`/blogs/${blog._id}`}
-                            className="text-blue-500 hover:underline mt-4 inline-block"
-                        >
-                            Read More
-                        </Link>
-
-                        <div className="absolute top-4 right-4 hidden group-hover:flex space-x-2">
-                            <button
+                        <div>
+                            <i className="text-sm">Posted in: {new Date(blog.createdAt).toLocaleDateString()}</i>
+                            <h2 className="text-2xl my-2 font-bold mb-2">{blog.title}</h2>
+                        </div>
+                        <div className="flex space-x-2 p-2">
+                            <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.90 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
+                                onClick={() => navigate(`/blogs/${blog._id}`)}
+                                className="bg-gradient-to-br from-green-500 to-green-800 text-white p-4 rounded-md"
+                            >
+                                <i className="fas fa-eye"></i>
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.90 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
                                 onClick={() => navigate(`/edit/${blog._id}`)}
-                                className="bg-yellow-400 text-white px-2 py-1 rounded-md hover:bg-yellow-500"
+                                className="bg-gradient-to-br from-navy-dark to-purple-bland text-white p-4 rounded-md"
                             >
-                                Edit
-                            </button>
-                            <button
+                                <i className="fas fa-edit"></i>
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.90 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
                                 onClick={() => handleDelete(blog._id)}
-                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600"
+                                className="bg-gradient-to-br from-red-500 to-red-800 text-white p-4 rounded-md"
                             >
-                                Delete
-                            </button>
+                                <i className="fas fa-trash"></i>
+                            </motion.button>
                         </div>
                     </div>
                 ))}
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.90 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    onClick={() => navigate("/create")}
+                    className="mx-auto bg-gradient-to-br from-navy-bland to-pastel-lightblue text-white p-4 rounded-md"
+                >
+                    <i className="fas fa-plus"></i> Create Blog Post
+                </motion.button>
             </div>
-        </motion.div>
+        </>
     );
 };
 

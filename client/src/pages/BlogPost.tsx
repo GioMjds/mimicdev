@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { NavLink, useParams } from "react-router-dom"
-import { motion } from 'framer-motion'
+import { useNavigate, useParams } from "react-router-dom"
 import { getBlogPostById } from "../services/axios"
 import Loading from "../components/Loading";
 
@@ -16,6 +15,7 @@ const BlogPost: FC = () => {
   const { id } = useParams<{ id: string }>()
   const [blog, setBlog] = useState<Blog | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -33,22 +33,16 @@ const BlogPost: FC = () => {
   if (!blog) return <Loading text="Reloading blog post..." timeout={5000} onTimeout={() => window.location.reload()} />
 
   return (
-    <motion.div
-      className="min-h-screen p-6 bg-gray-100"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8">
-        <NavLink to='/' className='p-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md mb-4'>&larr; Back</NavLink>
-        <h1 className="text-4xl font-bold text-left my-4">{blog.title}</h1>
-        <p className="text-gray-600 mb-4">By {blog.author}</p>
-        <p className="text-gray-700">{blog.content}</p>
-        <p className="text-gray-500 text-sm mt-4">
+    <>
+      <div className="max-w-7xl mx-auto bg-white bg-opacity-30 shadow-md rounded-lg p-4">
+        <p onClick={() => navigate('/')} className="cursor-pointer mb-1">&larr; Go Back</p>
+        <i className="text-white text-sm mb-2">
           Posted on {new Date(blog.createdAt).toLocaleDateString()}
-        </p>
+        </i>
+        <h1 className="text-4xl mb-4 font-bold text-left">{blog.title}</h1>
+        <p className="text-gray-700">{blog.content}</p>
       </div>
-    </motion.div>
+    </>
   )
 }
 
