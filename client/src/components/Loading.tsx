@@ -28,7 +28,7 @@ const Loading: FC<LoadingProps> = ({ text, timeout, onTimeout }) => {
             {loading && (
                 <div className="flex flex-col items-center">
                     <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-                    <p className="text-gray-500 text-center mt-4">{text}</p>
+                    <p className="text-black text-center mt-4">{text}</p>
                 </div>
             )}
         </motion.div>

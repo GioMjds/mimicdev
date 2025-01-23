@@ -54,15 +54,3 @@ export const deleteBlogPost = async (id: string) => {
         throw error;
     }
 };
-
-export const searchBlogPosts = async (searchTerm: string) => {
-    try {
-        const response = await API.get('/blogs/search', {
-            params: { searchTerm },
-        });
-        return response.data;
-    } catch (error) {
-        console.error(`Error fetching search results: ${error}`);
-        throw error;
-    }
-}

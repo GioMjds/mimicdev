@@ -34,7 +34,7 @@ const Home: FC = () => {
         fetchBlogs();
     }, []);
 
-    const handleDelete = (item: any) => {
+    const handleDelete = (item: string) => {
         setSelectedItem(item);
         setIsOpen(true);
     };
@@ -68,24 +68,24 @@ const Home: FC = () => {
                             <i className="text-sm">Posted in: {new Date(blog.createdAt).toLocaleDateString()}</i>
                             <h2 className="text-2xl my-2 font-bold mb-2 hover:cursor-pointer hover:underline" onClick={() => navigate(`/blogs/${blog._id}`)}>{blog.title}</h2>
                         </div>
-                        <div className="flex flex-row space-x-2 p-1">
+                        <div className="flex flex-col space-y-2 p-1">
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.90 }}
                                 transition={{ type: 'spring', stiffness: 300 }}
                                 onClick={() => navigate(`/edit/${blog._id}`)}
-                                className="bg-gradient-to-br from-navy-dark to-purple-bland text-white p-4 rounded-md"
+                                className="bg-green-600 text-sm text-white p-4 rounded-md"
                             >
-                                <i className="fas fa-edit"></i>
+                                <i className="fas fa-edit"></i> Edit Blog
                             </motion.button>
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.90 }}
                                 transition={{ type: 'spring', stiffness: 300 }}
                                 onClick={() => handleDelete(blog._id)}
-                                className="bg-gradient-to-br from-red-500 to-red-800 text-white p-4 rounded-md"
+                                className="bg-red-600 text-sm text-white p-4 rounded-md"
                             >
-                                <i className="fas fa-trash"></i>
+                                <i className="fas fa-trash"></i> Delete Blog
                             </motion.button>
                         </div>
                     </div>
@@ -95,7 +95,7 @@ const Home: FC = () => {
                     whileTap={{ scale: 0.90 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                     onClick={() => navigate("/create")}
-                    className="max-w-7xl mx-auto bg-gradient-to-br from-navy-bland to-pastel-lightblue text-white p-4 rounded-md"
+                    className="max-w-7xl mx-auto bg-green-700 text-white p-4 rounded-md"
                 >
                     <i className="fas fa-plus"></i> Create Blog Post
                 </motion.button>

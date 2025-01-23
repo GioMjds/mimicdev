@@ -49,7 +49,7 @@ const EditBlogPost: React.FC = () => {
 
   return (
     <motion.div
-      className="min-h-screen p-6 bg-sea-blue"
+      className="min-h-screen p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -57,7 +57,7 @@ const EditBlogPost: React.FC = () => {
       <h1 className="text-4xl font-bold text-center mb-6">Edit Blog Post</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-4xl mx-auto bg-white bg-opacity-10 shadow-md rounded-lg p-6"
+        className="max-w-4xl mx-auto bg-gray-800 bg-opacity-30 shadow-md rounded-lg p-6"
       >
         <div className="mb-4">
           <label className="block font-semibold mb-2">Title</label>

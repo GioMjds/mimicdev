@@ -8,7 +8,7 @@ import CreateBlogPost from './pages/CreateBlogPost'
 
 function App() {
   return (
-    <div className='bg-sea-blue mx-auto min-h-screen p-6'>
+    <div className='mx-auto min-h-screen p-6'>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
